@@ -1,0 +1,14 @@
+package Bookinglist;
+
+import java.util.List;
+
+import Testtablebooking.TablebookingVO;
+
+public interface Bookinglist_interface {
+
+	public void insert(Bookinglist bookinglist);
+    public void update(Bookinglist bookinglist);
+    public void delete(Integer BOOKING_NO);
+    public Bookinglist findByPrimaryKey(Integer BOOKING_NO);
+    public List<Bookinglist> getAll();
+}

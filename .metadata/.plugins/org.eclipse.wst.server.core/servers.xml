@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<servers>
+  <server auto-publish-setting="2" auto-publish-time="1" configuration-id="/Servers/Tomcat v9.0 Server at localhost-config" deployDir="wtpwebapps" hostname="localhost" id="Tomcat v9.0 Server at localhost" name="Tomcat v9.0 Server at localhost" runtime-id="Apache Tomcat v9.0" server-type="org.eclipse.jst.server.tomcat.90" server-type-id="org.eclipse.jst.server.tomcat.90" start-timeout="180" stop-timeout="15" testEnvironment="true" timestamp="5">
+    <list key="modules" value0="0201U_Servlet_JSP_Ver2_DB::org.eclipse.jst.jee.server:0201U_Servlet_JSP_Ver2_DB::jst.web::3.0" value1="0208U_Maven_SpringBootMVC_JSP3_Ver8_SpringData-Jpa::org.eclipse.jst.jee.server:0208U_Maven_SpringBootMVC_JSP3_Ver8_SpringData-Jpa::jst.web::4.0" value2="0205U_Maven_SpringBootMVC_Thymeleaf_Ver5_SpringData-Jpa::org.eclipse.jst.jee.server:0205U_Maven_SpringBootMVC_Thymeleaf_Ver5_SpringData-Jpa::jst.web::4.0" value3="demo::org.eclipse.jst.jee.server:demo::jst.web::4.0"/>
+  </server>
+</servers>

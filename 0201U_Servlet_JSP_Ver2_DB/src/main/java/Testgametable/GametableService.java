@@ -1,0 +1,32 @@
+package Testgametable;
+import java.util.List;
+import java.util.Set;
+
+import com.dept.model.DeptDAO;
+import com.dept.model.DeptVO;
+import com.emp.model.EmpVO;
+
+public class GametableService {
+
+	private Gametable_interface dao;
+	
+	public GametableService() {
+		dao = new GametableDAO();
+	}
+	
+	public List<GametableVO> getAll() {
+		return dao.getAll();
+	}
+	
+	public GametableVO getOneGametable(Integer TABLE_NO) {
+		return dao.findByPrimaryKey(TABLE_NO);
+	}
+
+//	public Set<GametableVO> getEmpsByTABLE_NO(Integer TABLE_NO) {
+//		return dao.getEmpsByTABLE_NO(TABLE_NO);
+//	}
+
+		public void deleteDept(Integer TABLE_NO) {
+			dao.delete(TABLE_NO);
+	}
+}

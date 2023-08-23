@@ -1,0 +1,45 @@
+package Bookinglist;
+
+import Testtablebooking.TablebookingDAO;
+import Testtablebooking.TablebookingVO;
+import Testtablebooking.Tablebooking_interface;
+
+public class BookinglistService {
+
+	private Bookinglist_interface dao;
+
+	public BookinglistService() {
+		dao = new BookinglistDAO();
+	}
+	
+	public BookinglistVO addBookinglistVO(Integer TABLE_NO, java.sql.Date TABLE_DATE, byte[] PERIOD_TIME) {
+
+		BookinglistVO addTBookinglistVO = new BookinglistVO();
+
+		addTBookinglistVO.setTABLE_NO(TABLE_NO);
+		addTBookinglistVO.setTABLE_DATE(TABLE_DATE);
+		addTBookinglistVO.setPERIOD_TIME(PERIOD_TIME);
+
+		
+		dao.insert(addTBookinglistVO);
+
+		return addTBookinglistVO;
+	}
+	
+	//預留給 Struts 2 或 Spring MVC 用
+		public void addEmp(BookinglistVO addTBookinglistVO) {
+			dao.insert(addTBookinglistVO);
+		}
+		
+		public TablebookingVO addTablebookingVO(Integer BOOKING_NO,Integer TABLE_NO, java.sql.Date TABLE_DATE, byte[] PERIOD_TIME) {
+			
+			BookinglistVO addTBookinglistVO = new BookinglistVO();
+			addTBookinglistVO.setBOOKING_NO(BOOKING_NO);
+			addTBookinglistVO.setTABLE_NO(TABLE_NO);
+			addTBookinglistVO.setTABLE_DATE(TABLE_DATE);
+			addTBookinglistVO.setPERIOD_TIME(PERIOD_TIME);
+			dao.update(addTBookinglistVO);
+
+			return dao.findByPrimaryKey(BOOKING_NO);
+		}
+}

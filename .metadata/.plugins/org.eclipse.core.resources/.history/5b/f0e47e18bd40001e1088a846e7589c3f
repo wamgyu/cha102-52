@@ -1,0 +1,7 @@
+package Testtablebooking;
+
+import Testgametable.Gametable_interface;
+
+public class TablebookingDAO implements Gametable_interface{
+
+}

@@ -1,0 +1,34 @@
+package Testgametable;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+import Testgametable.Gametable_interface;
+
+import Testgametable.GametableVO;
+
+public class GametableDAO implements Gametable_interface{
+
+	private static DataSource ds = null;
+	static {
+		try {
+			Context ctx = new InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/Testhead");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static final String INSERT_STMT = "INSERT INTO gametable (TABLE_NO,TABLE_TYPE) VALUES (?, ?)";
+	private static final String GET_ALL_STMT = "SELECT TABLE_NO , TABLE_TYPE FROM gametable";
+	private static final String GET_ONE_STMT = "SELECT TABLE_NO , TABLE_TYPE FROM gametable where TABLE_NO = ?";
+	private static final String GET_TABLE_STRING = "SELECT TABLE_NO, TABLE_TYPE FROM emp3 where TABLE_NO = ? order by TABLE_NO";
+	
+	private static final String DELETE_EMPs = "DELETE FROM gametable where TABLE_NO = ?";
+	private static final String DELETE_DEPT = "DELETE FROM gametable where TABLE_NO = ?";	
+	
+	private static final String UPDATE = "UPDATE gametable set TABLE_NO=?, TABLE_TYPE=? where TABLE_NO = ?";
+
+}

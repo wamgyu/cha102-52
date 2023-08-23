@@ -1,0 +1,7 @@
+package Testgametable;
+
+import com.dept.model.DeptDAO_interface;
+
+public class GametableJDBC implements DeptDAO_interface{
+
+}

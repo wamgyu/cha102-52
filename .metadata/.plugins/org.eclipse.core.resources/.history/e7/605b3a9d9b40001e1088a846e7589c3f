@@ -1,0 +1,13 @@
+package Testgametable;
+
+import com.dept.model.DeptDAO;
+import com.dept.model.DeptDAO_interface;
+
+public class GametableService {
+
+	private Gametable_interface dao;
+	
+	public GametableService() {
+		dao = new GametableDAO();
+	}
+}

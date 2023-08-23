@@ -1,0 +1,115 @@
+package Testgametable;
+
+import java.util.*;
+import java.sql.*;
+
+import com.dept.model.DeptVO;
+
+
+public class GametableJDBC implements GametableDAO_interface{
+	String driver = "com.mysql.cj.jdbc.Driver";
+	String url = "jdbc:mysql://localhost:3306/head?serverTimezone=Asia/Taipei";
+	String userid = "root";
+	String passwd = "0987242920";
+
+	private static final String INSERT_STMT = "INSERT INTO gametable (TABLE_NO,TABLE_TYPE) VALUES (?, ?)";
+	private static final String GET_ALL_STMT = "SELECT TABLE_NO , TABLE_TYPE FROM gametable";
+	private static final String GET_ONE_STMT = "SELECT TABLE_NO , TABLE_TYPE FROM gametable where TABLE_NO = ?";
+	private static final String GET_TABLEBOOKING_STRING = "SELECT TABLE_BOOK_NO, TABLE_DATEㄝ, TABLE_NO, TABLE_MOR, TABLE_EVE, TABLE_NIGHT FROM tablebooking where TABLE_NO = ? order by TABLE_NO";
+	
+	//先刪關聯的FK在刪本身的表格
+	private static final String DELETE_TABLEBOOKING = "DELETE FROM tablebooking where TABLE_NO = ?";
+	private static final String DELETE_GAMETABLE = "DELETE FROM gametable where TABLE_NO = ?";	
+	
+	private static final String UPDATE = "UPDATE gametable set TABLE_NO=?, TABLE_TYPE=? where TABLE_NO = ?";
+
+	
+	@Override
+	public void insert(GametableVO gametableVO) {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(INSERT_STMT);
+
+			pstmt.setInt(1, gametableVO.getTABLE_NO());
+			pstmt.setBytes(2, gametableVO.getTABLE_TYPE());
+			
+			pstmt.executeUpdate();
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		@Override
+		public void update(GametableVO gametableVO) {
+
+			Connection con = null;
+			PreparedStatement pstmt = null;
+
+			try {
+
+				Class.forName(driver);
+				con = DriverManager.getConnection(url, userid, passwd);
+				pstmt = con.prepareStatement(UPDATE);
+
+				pstmt.setInt(1, gametableVO.getTABLE_NO());
+				pstmt.setBytes(2, gametableVO.getTABLE_TYPE());
+
+				pstmt.executeUpdate();
+
+				// Handle any driver errors
+			} catch (ClassNotFoundException e) {
+				throw new RuntimeException("Couldn't load database driver. "
+						+ e.getMessage());
+				// Handle any SQL errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. "
+						+ se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+
+		}
+	}
+
+}

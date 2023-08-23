@@ -1,0 +1,71 @@
+package Testtablebooking;
+
+import java.sql.Date;
+import java.util.List;
+import java.util.Set;
+
+import com.dept.model.DeptDAO;
+import com.dept.model.DeptDAO_interface;
+import com.dept.model.DeptVO;
+import com.emp.model.EmpVO;
+
+public class TablebookingService {
+	private Tablebooking_interface dao;
+
+	public TablebookingService() {
+		dao = new TablebookingDAO();
+	}
+
+	public TablebookingVO addTablebookingVO(java.sql.Date TABLE_DATE, Integer TABLE_NO, byte [] TABLE_MOR,
+			byte [] TABLE_EVE, byte [] TABLE_NIGHT) {
+
+		TablebookingVO addTablebookingVO = new TablebookingVO();
+
+		addTablebookingVO.setTABLE_DATE(TABLE_DATE);
+		addTablebookingVO.setTABLE_NO(TABLE_NO);
+		addTablebookingVO.setTABLE_MOR(TABLE_MOR);
+		addTablebookingVO.setTABLE_EVE(TABLE_EVE);
+		addTablebookingVO.setTABLE_NIGHT(TABLE_NIGHT);
+		
+		dao.insert(addTablebookingVO);
+
+		return addTablebookingVO;
+	}
+
+	//預留給 Struts 2 或 Spring MVC 用
+	public void addEmp(TablebookingVO addTablebookingVO) {
+		dao.insert(addTablebookingVO);
+	}
+	
+	public TablebookingVO addTablebookingVO(java.sql.Date TABLE_DATE, byte [] TABLE_MOR,
+			byte [] TABLE_EVE, byte [] TABLE_NIGHT) {
+		
+		TablebookingVO addTablebookingVO = new TablebookingVO();
+		addTablebookingVO.setTABLE_BOOK_NO(TABLE_BOOK_NO);
+		addTablebookingVO.setTABLE_DATE(TABLE_DATE);
+		
+		addTablebookingVO.setTABLE_MOR(TABLE_MOR);
+		addTablebookingVO.setTABLE_EVE(TABLE_EVE);
+		addTablebookingVO.setTABLE_NIGHT(TABLE_NIGHT);
+		
+		dao.insert(addTablebookingVO);
+
+		return dao.findByPrimaryKey(addTablebookingVO);
+	}
+	
+	public List<TablebookingVO> getAll() {
+		return dao.getAll();
+	}
+
+	public TablebookingVO getOneTablebooking(Integer TABLE_DATE) {
+		return dao.findByPrimaryKey(TABLE_DATE);
+	}
+
+//	public Set<TablebookingVO> getEmpsByTABLE_DATE(Date TABLE_DATE) {
+//		return dao.getOneTablebooking(TABLE_DATE);
+//	}
+
+	public void deleteDept(Integer deptno) {
+		dao.delete(deptno);
+	}
+}

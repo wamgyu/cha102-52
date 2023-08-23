@@ -1,0 +1,13 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+	<div align="center">
+		<h3><span>查詢結果 :</span></h3>
+		<span>員工編號:</span><span>${empVO.empno}</span><br/>
+		<span>員工姓名:</span><span>${empVO.ename}</span><br/>
+		<span>職位:</span><span>${empVO.job}</span><br/>
+		<span>雇用日期:</span><span>${empVO.hiredate}</span><br/>
+		<span>薪水:</span><span>${empVO.sal}</span><br/>
+		<span>獎金:</span><span>${empVO.comm}</span><br/>
+		<span>部門:</span><span>${empVO.deptVO.deptno}-[${empVO.deptVO.dname}]</span><br/>
+		<span>照片:</span><span><img src="<%=request.getContextPath()%>/emp/DBGifReader?empno=${empVO.empno}" width="100px"></span><br/>
+	</div>

@@ -1,0 +1,9 @@
+package Bookinglist;
+
+import java.io.Serializable;
+@Entity
+public class BookinglistVO implements Serializable{
+	
+	
+
+}

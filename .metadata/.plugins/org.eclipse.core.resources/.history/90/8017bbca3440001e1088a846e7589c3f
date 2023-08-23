@@ -1,0 +1,84 @@
+package com.emp.model;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.*;
+
+@WebServlet("/memberServlet")     //這行很重要! 不能打錯
+public class memberServlet extends HttpServlet {   //extends HttpServlet 這是固定的
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+ //這邊是重寫doPost , 寫了才能接收從.html傳來的method ="Post"
+        // JDBC 連接參數
+        String jdbcUrl = "jdbc:mysql://localhost:3306/polybrain_bid";
+        String username = "root";
+        String password = "0987242920";
+
+        // 設定回應的內容類型
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        try {
+
+            // 加載MySQL驅動程式
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            // 連接資料庫
+            Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
+
+            // 創建SQL查詢
+            String sql = "SELECT * FROM member";
+            Statement statement = connection.createStatement();
+
+            // 執行查詢
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            // 處理查詢結果
+            out.println("<html><body>");
+            out.println("<h1>Members:</h1>");
+            while (resultSet.next()) {
+                String memberNo = resultSet.getString("MEM_NO");
+                String memberName = resultSet.getString("MEM_NAME");
+                String memberPID = resultSet.getString("MEM_PID");
+                String memberGender = resultSet.getString("MEM_GENDER");
+                String memberPic = resultSet.getString("MEM_PIC");
+                String memberEmail = resultSet.getString("MEM_EMAIL");
+                String memberPwd = resultSet.getString("MEM_PWD");
+                String memberPhone = resultSet.getString("MEM_PH");
+                String memberAddress = resultSet.getString("MEM_ADDRS");
+                String memberBirth = resultSet.getString("MEM_BIRTH");
+                String memberAuth = resultSet.getString("MEM_AUTH");
+                String memberVio = resultSet.getString("MEM_VIO");
+
+                out.println("<p>Member No: " + memberNo + "</p>");
+                out.println("<p>Name: " + memberName + "</p>");
+                out.println("<p>Personal ID: " + memberPID + "</p>");
+                out.println("<p>Gender: " + memberGender + "</p>");
+                out.println("<p>Picture: " + memberPic + "</p>");
+                out.println("<p>Email: " + memberEmail + "</p>");
+                out.println("<p>Password: " + memberPwd + "</p>");
+                out.println("<p>Phone: " + memberPhone + "</p>");
+                out.println("<p>Address: " + memberAddress + "</p>");
+                out.println("<p>Birth: " + memberBirth + "</p>");
+                out.println("<p>Auth: " + memberAuth + "</p>");
+                out.println("<p>Vio: " + memberVio + "</p>");
+            }
+            out.println("</body></html>");
+
+            // 關閉連接和資源   千萬要記得關閉
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            out.println("Error loading MySQL driver: " + e.getMessage());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            out.println("An error occurred while accessing the database: " + e.getMessage());
+        }  //這邊catch這麼多奇怪的東西 , 是因為製作的時候都有出現這些例外 , 所以就把他們都抓出來了
+    }
+}

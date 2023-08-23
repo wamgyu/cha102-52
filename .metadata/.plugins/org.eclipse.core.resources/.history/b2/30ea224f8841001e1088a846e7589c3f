@@ -1,0 +1,92 @@
+package Testgametable;
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.util.*;
+
+import javax.servlet.annotation.MultipartConfig;
+
+import Bookinglist.*;
+import Testtablebooking.*;
+public class GameServlet extends HttpServlet{
+	public void doGet(HttpServletRequest req, HttpServletResponse res)
+			throws ServletException, IOException {
+		doPost(req, res);
+	}
+
+	public void doPost(HttpServletRequest req, HttpServletResponse res)
+			throws ServletException, IOException {
+
+		req.setCharacterEncoding("UTF-8");
+		String action = req.getParameter("action");
+		
+if ("insert".equals(action)) { // 來自addEmp.jsp的請求  
+			
+			Map<String,String> errorMsgs = new LinkedHashMap<String,String>();
+			req.setAttribute("errorMsgs", errorMsgs);
+
+				/***********************1.接收請求參數 - 輸入格式的錯誤處理*************************/
+				//這裡的關鍵是 JSP的資料串是name="ename"
+			    String BOOKING_NO = req.getParameter("BOOKING_NO");
+				String enameReg = "^[(0-9)]{2,10}$"; //^開始匹配，(\u4e00-\u9fa5)匹配任何一個中文字元，{2,10}，內容必須在2~10長度之間
+				if (BOOKING_NO == null || BOOKING_NO.trim().length() == 0) {
+					errorMsgs.put("BOOKING_NO","會員編號: 請勿空白");
+				} else if(!ename.trim().matches(enameReg)) { //檢查去掉空白後字符是否符合enameReg物件內的東西，以下練習正則(規)表示式(regular-expression)
+					errorMsgs.put("BOOKING_NO","會員編號: 只能是數字");
+	            }
+				
+				String job = req.getParameter("job").trim(); //trim()用來判斷刪除左右兩邊的空白
+				String jobReg = "^.{2,10}$"; //此正則(規)表示式(regular-expression)- 用來比對JSR 303 的@Size
+				if (job == null || job.trim().length() == 0) {
+					errorMsgs.put("job","員工職位: 請勿空白");
+				} else if(!job.trim().matches(jobReg)) {
+					errorMsgs.put("job","員工職位: 長度必需在2到10之間");
+	            }
+				
+				java.sql.Date hiredate = null;
+				try {
+					hiredate = java.sql.Date.valueOf(req.getParameter("hiredate").trim());
+				} catch (IllegalArgumentException e) {
+					errorMsgs.put("hiredate","雇用日期: 請勿空白");
+				}
+				
+				Double sal = null;
+				try {
+					sal = Double.valueOf(req.getParameter("sal").trim());
+				} catch (NumberFormatException e) {
+					errorMsgs.put("sal","員工薪水: 請輸入數字");
+				}
+				
+				Double comm = null;
+				try {
+					comm = Double.valueOf(req.getParameter("comm").trim());
+				} catch (NumberFormatException e) {
+					errorMsgs.put("comm","員工獎金: 請輸入數字");
+				}
+				
+				//找出TABLE_NO的參數請求 沒有這段就沒有東西
+				Integer TABLE_NO = Integer.valueOf(req.getParameter("TABLE_NO").trim());
+				
+				// Send the use back to the form, if there were errors
+				if (!errorMsgs.isEmpty()) {
+					RequestDispatcher failureView = req
+							.getRequestDispatcher("/back-end/emp/addEmp.jsp");
+					failureView.forward(req, res);
+					return;
+				}
+				
+				/***************************2.開始新增資料***************************************/
+				BookinglistService glistSvc = new BookinglistService();
+				glistSvc.addBookinglist(TABLE_NO,TABLE_DATE,PERIOD_TIME);
+				
+				/***************************3.新增完成,準備轉交(Send the Success view)***********/
+				req.setAttribute("success", "- (新增成功)"); //在listAllEmp.jsp的頁面標頭旁有個success這邊新增成功會把那個添加- (新增成功)這段文字
+				String url = "/back-end/emp/listAllEmp.jsp"; //新增成功跑到這個畫面
+				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉移到listAllEmp.jsp
+				successView.forward(req, res);				
+		}
+	}
+}
+
+

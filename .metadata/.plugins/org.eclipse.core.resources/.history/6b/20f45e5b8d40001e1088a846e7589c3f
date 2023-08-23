@@ -1,0 +1,47 @@
+package Testbooking;
+
+import java.sql.Date;
+
+import com.mysql.cj.x.protobuf.MysqlxCrud.Insert;
+
+public class BookingVo implements java.io.Serializable{
+
+	private Integer BOOKING_NO;
+	private Integer MEM_NO;
+	private byte[] BOOKING_STATE;
+	private Date BOOKING_DATE;
+	public Integer getBOOKING_NO() {
+		return BOOKING_NO;
+	}
+	public void setBOOKING_NO(Integer bOOKING_NO) {
+		BOOKING_NO = bOOKING_NO;
+	}
+	public Integer getMEM_NO() {
+		return MEM_NO;
+	}
+	public void setMEM_NO(Integer mEM_NO) {
+		MEM_NO = mEM_NO;
+	}
+	public byte[] getBOOKING_STATE() {
+		return BOOKING_STATE;
+	}
+	public void setBOOKING_STATE(byte[] bOOKING_STATE) {
+		BOOKING_STATE = bOOKING_STATE;
+	}
+	public Date getBOOKING_DATE() {
+		return BOOKING_DATE;
+	}
+	public void setBOOKING_DATE(Date bOOKING_DATE) {
+		BOOKING_DATE = bOOKING_DATE;
+	}
+	
+	// for join dname from deptno從部門的VO抓取部門資料傳回來這邊調用如果欄位有別的表格要這樣叫
+	public Testgametable.GametableVO getGametableVO() {
+		com.dept.model.DeptService deptSvc = new com.dept.model.DeptService();
+		com.dept.model.DeptVO deptVO = deptSvc.getOneDept(deptno);
+		return deptVO;
+	
+
+
+
+}

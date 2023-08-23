@@ -1,0 +1,289 @@
+package Testgametable;
+import java.util.*;
+import java.sql.*;
+
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+
+import Testgametable.GametableVO;
+
+public class GametableDAO implements Gametable_interface{
+
+	private static DataSource ds = null;
+	static {
+		try {
+			Context ctx = new InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/Testhead");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static final String INSERT_STMT = "INSERT INTO gametable (TABLE_NO, TABLE_TYPE, TABLE_MANE) VALUES (?, ?, ?)";
+	private static final String GET_ALL_STMT = "SELECT TABLE_NO , TABLE_TYPE, TABLE_MANE FROM gametable";
+	private static final String GET_ONE_STMT = "SELECT TABLE_NO , TABLE_TYPE, TABLE_MANE FROM gametable where TABLE_NO = ?";
+	private static final String GET_TABLEBOOKING_STRING = "SELECT TABLE_BOOK_NO, TABLE_DATE, TABLE_NO, TABLE_MOR, TABLE_EVE, TABLE_NIGHT FROM tablebooking where TABLE_NO = ? order by TABLE_NO";
+	
+	//先刪關聯的FK在刪本身的表格
+	private static final String DELETE_TABLEBOOKING = "DELETE FROM tablebooking where TABLE_NO = ?";
+	private static final String DELETE_GAMETABLE = "DELETE FROM gametable where TABLE_NO = ?";	
+	
+	private static final String UPDATE = "UPDATE gametable set TABLE_NO=?, TABLE_TYPE=?, TABLE_MANE=? where TABLE_NO = ?";
+
+	@Override
+	public void insert(GametableVO gametableVO) {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(INSERT_STMT);
+
+			pstmt.setInt(1, gametableVO.getTABLE_NO());
+			pstmt.setBytes(2, gametableVO.getTABLE_TYPE());
+			pstmt.setString(3, gametableVO.getTABLE_MANE());
+
+			pstmt.executeUpdate();
+
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+
+	}
+	
+	@Override
+	public void update(GametableVO gametableVO) {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(UPDATE);
+
+			pstmt.setInt(1, gametableVO.getTABLE_NO());
+			pstmt.setBytes(2, gametableVO.getTABLE_TYPE());
+			pstmt.setString(3, gametableVO.getTABLE_MANE());
+			pstmt.executeUpdate();
+
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+
+	}
+	
+	@Override
+	public void delete(Integer TABLE_NO) {
+		int updateCount_Tables = 0;  //更新計數器
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+
+			con = ds.getConnection();
+
+			// 1●設定於 pstm.executeUpdate更新()之前
+			con.setAutoCommit(false);
+
+			// 先刪除桌子設定表
+			pstmt = con.prepareStatement(DELETE_TABLEBOOKING);
+			pstmt.setInt(1, TABLE_NO);
+			updateCount_Tables = pstmt.executeUpdate();
+			// 再刪除桌子
+			pstmt = con.prepareStatement(DELETE_GAMETABLE);
+			pstmt.setInt(1, TABLE_NO);
+			pstmt.executeUpdate();
+
+			// 2●設定於 pstm.executeUpdate()之後
+			con.commit();
+			con.setAutoCommit(true);
+			System.out.println("刪除桌子" + TABLE_NO + "時,共有桌子設定" + updateCount_Tables
+					+ "格式同時被刪除");
+			
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			if (con != null) {
+				try {
+					// 3●設定於當有exception發生時之catch區塊內
+					con.rollback();
+				} catch (SQLException excep) {
+					throw new RuntimeException("rollback error occured. "
+							+ excep.getMessage());
+				}
+			}
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+
+	}
+
+	@Override
+	public GametableVO findByPrimaryKey(Integer TABLE_NO) {
+
+		GametableVO gametableVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ONE_STMT);
+
+			pstmt.setInt(1, TABLE_NO);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// deptVO 也稱為 Domain objects
+				gametableVO = new GametableVO();
+				gametableVO.setTABLE_NO(rs.getInt("TABLE_NO"));
+				gametableVO.setTABLE_TYPE(rs.getBytes("TABLE_TYPE"));
+				gametableVO.setTABLE_MANE(rs.getString("TABLE_MANE"));
+			}
+
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return gametableVO;
+	}
+	
+	@Override
+	public List<GametableVO> getAll() {
+		List<GametableVO> list = new ArrayList<GametableVO>();
+		GametableVO gametableVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_ALL_STMT);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				gametableVO = new GametableVO();
+				gametableVO.setTABLE_NO(rs.getInt("TABLE_NO"));
+				gametableVO.setTABLE_TYPE(rs.getBytes("TABLE_TYPE"));
+				gametableVO.setTABLE_MANE(rs.getString("TABLE_MANE"));
+				list.add(gametableVO); // Store the row in the list將行存儲在列表中
+			}
+
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+	
+}
+

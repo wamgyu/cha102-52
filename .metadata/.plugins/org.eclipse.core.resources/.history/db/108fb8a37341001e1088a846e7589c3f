@@ -1,0 +1,34 @@
+package Testtablebooking;
+
+import java.sql.Date;
+import java.util.List;
+import java.util.Set;
+
+import com.dept.model.DeptDAO;
+import com.dept.model.DeptDAO_interface;
+import com.dept.model.DeptVO;
+import com.emp.model.EmpVO;
+
+public class TablebookingService {
+	private Tablebooking_interface dao;
+
+	public TablebookingService() {
+		dao = new TablebookingDAO();
+	}
+
+	public List<TablebookingVO> getAll() {
+		return dao.getAll();
+	}
+
+	public TablebookingVO getOneTablebooking(Integer TABLE_DATE) {
+		return dao.findByPrimaryKey(TABLE_DATE);
+	}
+
+//	public Set<TablebookingVO> getEmpsByTABLE_DATE(Date TABLE_DATE) {
+//		return dao.getOneTablebooking(TABLE_DATE);
+//	}
+
+	public void deleteDept(Integer deptno) {
+		dao.delete(deptno);
+	}
+}

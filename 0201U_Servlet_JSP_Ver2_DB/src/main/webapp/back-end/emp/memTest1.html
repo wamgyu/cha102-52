@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MemberTest</title>
+</head>
+<body>
+    <h1>Member test</h1>
+    <form action="/PolyBrain/memberServlet" method="post">  <!-- action指向要做處理的.java  // method表明傳送請求的方式為POST -->
+        <input type="submit" value="push">    <!--type=submit這是一個按鈕的樣式 // value = push 是指按鈕內的文字內容 -->
+        <input type="date" id="dateInput" name="chosen-date">
+      
+
+     
+
+    </form>
+    
+
+    <script>
+        let dateInput = document.getElementById('dateInput');
+        
+        // 設定今天作為最小日期
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = today.getFullYear();
+        today = yyyy + '-' + mm + '-' + dd;
+        dateInput.min = today;
+    
+        // 設定10天後作為最大日期
+        let tenDaysLater = new Date();
+        tenDaysLater.setDate(tenDaysLater.getDate() + 10);
+        dd = String(tenDaysLater.getDate()).padStart(2, '0');
+        mm = String(tenDaysLater.getMonth() + 1).padStart(2, '0'); 
+        yyyy = tenDaysLater.getFullYear();
+        let maxDate = yyyy + '-' + mm + '-' + dd;
+        dateInput.max = maxDate;
+    </script>
+</body>
+</html>
