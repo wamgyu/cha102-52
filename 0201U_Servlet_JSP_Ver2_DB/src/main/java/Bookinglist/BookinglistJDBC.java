@@ -16,8 +16,8 @@ public class BookinglistJDBC implements Bookinglist_interface{
 	String passwd = "0987242920";
 	
 	private static final String INSERT_STMT = "INSERT INTO bookinglist ( TABLE_NO, TABLE_DATE, PERIOD_TIME) VALUES ( ?, ?, ?)";
-	private static final String GET_ALL_STMT = "SELECT BOOKING_NO, TABLE_NO, TABLE_DATE, BOOKING_CHECK_STATE, PERIOD_TIME FROM bookinglist order by BOOKING_NO";
-	private static final String GET_ONE_STMT = "SELECT BOOKING_NO, TABLE_NO, TABLE_DATE, BOOKING_CHECK_STATE, PERIOD_TIME FROM bookinglist where BOOKING_NO = ?";
+	private static final String GET_ALL_STMT = "SELECT BOOKING_NO, TABLE_NO, TABLE_DATE, BOOKING_CHECK_STATE, BOOKING_STATE, PERIOD_TIME FROM bookinglist order by BOOKING_NO";
+	private static final String GET_ONE_STMT = "SELECT BOOKING_NO, TABLE_NO, TABLE_DATE, BOOKING_CHECK_STATE, BOOKING_STATE, PERIOD_TIME FROM bookinglist where BOOKING_NO = ?";
 	private static final String DELETE = "DELETE FROM tablebooking where BOOKING_NO = ?";
 	private static final String UPDATE = "UPDATE tablebooking set TABLE_NO=?, TABLE_DATE=?, BOOKING_CHECK_STATE=?, PERIOD_TIME=? where BOOKING_NO = ?";
 
@@ -35,7 +35,7 @@ public class BookinglistJDBC implements Bookinglist_interface{
 			
 			pstmt.setInt(1, bookinglistVO.getTABLE_NO());
 			pstmt.setDate(2, bookinglistVO.getTABLE_DATE());
-			pstmt.setBytes(3, bookinglistVO.getPERIOD_TIME());
+			pstmt.setInt(3, bookinglistVO.getPERIOD_TIME());
 			
 			pstmt.executeUpdate();
 
@@ -80,7 +80,7 @@ public class BookinglistJDBC implements Bookinglist_interface{
 
 			pstmt.setInt(1, bookinglistVO.getTABLE_NO());
 			pstmt.setDate(2, bookinglistVO.getTABLE_DATE());
-			pstmt.setBytes(3, bookinglistVO.getPERIOD_TIME());
+			pstmt.setInt(3, bookinglistVO.getPERIOD_TIME());
 			
 
 			pstmt.executeUpdate();
@@ -179,8 +179,8 @@ public class BookinglistJDBC implements Bookinglist_interface{
 				bookinglistVO.setBOOKING_NO(rs.getInt("BOOKING_NO"));
 				bookinglistVO.setTABLE_NO(rs.getInt("TABLE_NO"));
 				bookinglistVO.setTABLE_DATE(rs.getDate("TABLE_DATE"));
-				bookinglistVO.setBOOKING_CHECK_STATE(rs.getBytes("BOOKING_CHECK_STATE"));
-				bookinglistVO.setPERIOD_TIME(rs.getBytes("PERIOD_TIME"));
+				bookinglistVO.setBOOKING_CHECK_STATE(rs.getInt("BOOKING_CHECK_STATE"));
+				bookinglistVO.setPERIOD_TIME(rs.getInt("PERIOD_TIME"));
 			}
 
 			// Handle any driver errors
@@ -240,8 +240,9 @@ public class BookinglistJDBC implements Bookinglist_interface{
 				bookinglistVO.setBOOKING_NO(rs.getInt("BOOKING_NO"));
 				bookinglistVO.setTABLE_NO(rs.getInt("TABLE_NO"));
 				bookinglistVO.setTABLE_DATE(rs.getDate("TABLE_DATE"));
-				bookinglistVO.setBOOKING_CHECK_STATE(rs.getBytes("BOOKING_CHECK_STATE"));
-				bookinglistVO.setPERIOD_TIME(rs.getBytes("PERIOD_TIME"));
+				bookinglistVO.setBOOKING_CHECK_STATE(rs.getInt("BOOKING_CHECK_STATE"));
+				bookinglistVO.setBOOKING_STATE(rs.getInt("BOOKING_STATE"));
+				bookinglistVO.setPERIOD_TIME(rs.getInt("PERIOD_TIME"));
 				list.add(bookinglistVO); // Store the row in the list
 			}
 
@@ -282,13 +283,5 @@ public class BookinglistJDBC implements Bookinglist_interface{
 	public static void main(String[] args) {
 	EmpJDBCDAO dao = new EmpJDBCDAO();
 	
-	// 新增
-	BookinglistVO bookinglistVO = new BookinglistVO();
-	bookinglistVO.setTABLE_NO("1");
-	bookinglistVO.setTABLE_DATE("2005-01-01");
-	bookinglistVO.setPERIOD_TIME(java.sql.Date.valueOf(""));
-	
-			dao.insert(bookinglistVO);
 	}
-	
 }

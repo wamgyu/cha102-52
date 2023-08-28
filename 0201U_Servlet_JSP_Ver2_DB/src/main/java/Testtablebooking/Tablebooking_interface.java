@@ -1,8 +1,10 @@
 package Testtablebooking;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
+import Bookinglist.BookinglistVO;
 import Testgametable.GametableVO;
 
 public interface Tablebooking_interface {
@@ -13,6 +15,7 @@ public interface Tablebooking_interface {
     public TablebookingVO findByPrimaryKey(Integer TABLE_BOOK_NO);
     public List<TablebookingVO> getAll();
     //查詢某部門的員工(一對多)(回傳 Set)
-//    public Set<TablebookingVO> getEmpsByTable(Integer TABLE_BOOK_NO);
+    public List<TablebookingVO> getten();
+    public TablebookingVO getTableBookingByNo(Integer TABLE_NO);
 }
 

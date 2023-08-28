@@ -11,4 +11,5 @@ public interface Bookinglist_interface {
     public void delete(Integer BOOKING_NO);
     public BookinglistVO findByPrimaryKey(Integer BOOKING_NO);
     public List<BookinglistVO> getAll();
+    
 }

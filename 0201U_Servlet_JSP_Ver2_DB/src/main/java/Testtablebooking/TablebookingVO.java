@@ -7,9 +7,9 @@ public class TablebookingVO implements java.io.Serializable{
 	private Integer TABLE_BOOK_NO;
 	private Date TABLE_DATE;
 	private Integer TABLE_NO;
-	private byte [] TABLE_MOR;
-	private byte [] TABLE_EVE;
-	private byte [] TABLE_NIGHT;
+	private Integer TABLE_MOR;
+	private Integer TABLE_EVE;
+	private Integer TABLE_NIGHT;
 	
 	//編號
 	public Integer getTABLE_BOOK_NO() {
@@ -36,26 +36,26 @@ public class TablebookingVO implements java.io.Serializable{
 	}
 	
 	//上午(9-12)
-	public byte[] getTABLE_MOR() {
+	public Integer getTABLE_MOR() {
 		return TABLE_MOR;
 	}
-	public void setTABLE_MOR(byte[] tABLE_MOR) {
+	public void setTABLE_MOR(Integer tABLE_MOR) {
 		TABLE_MOR = tABLE_MOR;
 	}
 	
 	//下午(1-4)
-	public byte[] getTABLE_EVE() {
+	public Integer getTABLE_EVE() {
 		return TABLE_EVE;
 	}
-	public void setTABLE_EVE(byte[] tABLE_EVE) {
+	public void setTABLE_EVE(Integer tABLE_EVE) {
 		TABLE_EVE = tABLE_EVE;
 	}
 	
 	//晚上(6-8)
-	public byte[] getTABLE_NIGHT() {
+	public Integer getTABLE_NIGHT() {
 		return TABLE_NIGHT;
 	}
-	public void setTABLE_NIGHT(byte[] tABLE_NIGHT) {
+	public void setTABLE_NIGHT(Integer tABLE_NIGHT) {
 		TABLE_NIGHT = tABLE_NIGHT;
 	}
 	

@@ -11,4 +11,5 @@ public interface Gametable_interface {
     public GametableVO findByPrimaryKey(Integer TABLE_NO);
     public List<GametableVO> getAll();
 //    public Set<GametableVO> getEmpsByTABLE_NO(Integer TABLE_NO);
+  
 }

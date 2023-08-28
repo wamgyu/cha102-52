@@ -3,7 +3,7 @@ package Testgametable;
 public class GametableVO implements java.io.Serializable{
 	
 	private Integer TABLE_NO;
-	private byte [] TABLE_TYPE;
+	private Integer TABLE_TYPE;
 	private String TABLE_MANE;
 	
 	public String getTABLE_MANE() {
@@ -22,10 +22,10 @@ public class GametableVO implements java.io.Serializable{
 	}
 	
 	
-	public byte[] getTABLE_TYPE() {
+	public Integer getTABLE_TYPE() {
 		return TABLE_TYPE;
 	}
-	public void setTABLE_TYPE(byte[] tABLE_TYPE) {
+	public void setTABLE_TYPE(Integer tABLE_TYPE) {
 		TABLE_TYPE = tABLE_TYPE;
 	}
 	

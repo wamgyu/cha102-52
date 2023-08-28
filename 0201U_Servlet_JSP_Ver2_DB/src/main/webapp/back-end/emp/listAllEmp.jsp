@@ -7,6 +7,10 @@
     List<EmpVO> list = empSvc.getAll(); 
     if(request.getAttribute("empListData")==null) pageContext.setAttribute("empListData",list);
 %>
+<!-- 接著檢查 request 範疇中是否有一個屬性名稱為 empListData。如果沒有，那麼它將 list 賦值給 pageContext 範疇中的屬性名稱為 empListData。
+     從這段程式碼，我們可以推斷出 empListData 這個名稱是在這裡被設定的： -->
+     
+     
 <!DOCTYPE html>
 <html>
 <head>

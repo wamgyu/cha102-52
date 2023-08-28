@@ -1,19 +1,18 @@
-package Bookinglist;
-
 import java.util.*;
 import java.sql.*;
+
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import Testtablebooking.TablebookingVO;
 
+import Testgametable.GametableVO;
+import Testgametable.Gametable_interface;
 
-public class BookinglistDAO implements Bookinglist_interface {
+public class GametableDAO implements Gametable_interface{
 
-	// 一個應用程式中,針對一個資料庫 ,共用一個DataSource即可
 	private static DataSource ds = null;
 	static {
 		try {
@@ -23,16 +22,20 @@ public class BookinglistDAO implements Bookinglist_interface {
 			e.printStackTrace();
 		}
 	}
-
-	private static final String INSERT_STMT = "INSERT INTO bookinglist ( TABLE_NO, TABLE_DATE, PERIOD_TIME) VALUES ( ?, ?, ?)";
-	private static final String GET_ALL_STMT = "SELECT BOOKING_NO, TABLE_NO, TABLE_DATE, BOOKING_CHECK_STATE, PERIOD_TIME FROM bookinglist order by BOOKING_NO";
-	private static final String GET_ONE_STMT = "SELECT BOOKING_NO, TABLE_NO, TABLE_DATE, BOOKING_CHECK_STATE, PERIOD_TIME FROM bookinglist where BOOKING_NO = ?";
-	private static final String DELETE = "DELETE FROM tablebooking where BOOKING_NO = ?";
-	private static final String UPDATE = "UPDATE tablebooking set TABLE_NO=?, TABLE_DATE=?, BOOKING_CHECK_STATE=?, PERIOD_TIME=? where BOOKING_NO = ?";
-	private static final String QUERY_TABLE = "select * FROM tablebooking where TABLE_NO=?, TABLE_DATE=?";
 	
+	private static final String INSERT_STMT = "INSERT INTO gametable (TABLE_NO, TABLE_TYPE, TABLE_MANE) VALUES (?, ?, ?)";
+	private static final String GET_ALL_STMT = "SELECT TABLE_NO , TABLE_TYPE, TABLE_MANE FROM gametable";
+	private static final String GET_ONE_STMT = "SELECT TABLE_NO , TABLE_TYPE, TABLE_MANE FROM gametable where TABLE_NO = ?";
+	private static final String GET_TABLEBOOKING_STRING = "SELECT TABLE_BOOK_NO, TABLE_DATE, TABLE_NO, TABLE_MOR, TABLE_EVE, TABLE_NIGHT FROM tablebooking where TABLE_NO = ? order by TABLE_NO";
+	
+	//先刪關聯的FK在刪本身的表格
+	private static final String DELETE_TABLEBOOKING = "DELETE FROM tablebooking where TABLE_NO = ?";
+	private static final String DELETE_GAMETABLE = "DELETE FROM gametable where TABLE_NO = ?";	
+	
+	private static final String UPDATE = "UPDATE gametable set TABLE_NO=?, TABLE_TYPE=?, TABLE_MANE=? where TABLE_NO = ?";
+    
 	@Override
-	public void insert(BookinglistVO bookinglistVO) {
+	public void insert(GametableVO gametableVO) {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -41,12 +44,11 @@ public class BookinglistDAO implements Bookinglist_interface {
 
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(INSERT_STMT);
-			
-			pstmt.setInt(1, bookinglistVO.getTABLE_NO());
-			pstmt.setDate(2, bookinglistVO.getTABLE_DATE());
-			pstmt.setInt(3, bookinglistVO.getPERIOD_TIME());
-			
-		
+
+			pstmt.setInt(1, gametableVO.getTABLE_NO());
+			pstmt.setInt(2, gametableVO.getTABLE_TYPE());
+			pstmt.setString(3, gametableVO.getTABLE_MANE());
+
 			pstmt.executeUpdate();
 
 			// Handle any SQL errors
@@ -74,7 +76,7 @@ public class BookinglistDAO implements Bookinglist_interface {
 	}
 	
 	@Override
-	public void update (BookinglistVO bookinglistVO) {
+	public void update(GametableVO gametableVO) {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -84,12 +86,12 @@ public class BookinglistDAO implements Bookinglist_interface {
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE);
 
-			pstmt.setInt(1, bookinglistVO.getTABLE_NO());
-			pstmt.setDate(2, bookinglistVO.getTABLE_DATE());
-			pstmt.setInt(3, bookinglistVO.getPERIOD_TIME());
+			pstmt.setInt(1, gametableVO.getTABLE_NO());
+			pstmt.setInt(2, gametableVO.getTABLE_TYPE());
+			pstmt.setString(3, gametableVO.getTABLE_MANE());
 			pstmt.executeUpdate();
 
-			// Handle any driver errors
+			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -110,10 +112,12 @@ public class BookinglistDAO implements Bookinglist_interface {
 				}
 			}
 		}
+
 	}
 	
 	@Override
-	public void delete(Integer BOOKING_NO) {
+	public void delete(Integer TABLE_NO) {
+		int updateCount_Tables = 0;  //更新計數器
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -121,16 +125,38 @@ public class BookinglistDAO implements Bookinglist_interface {
 		try {
 
 			con = ds.getConnection();
-			pstmt = con.prepareStatement(DELETE);
 
-			pstmt.setInt(1, BOOKING_NO);
+			// 1●設定於 pstm.executeUpdate更新()之前
+			con.setAutoCommit(false);
+
+			// 先刪除桌子設定表
+			pstmt = con.prepareStatement(DELETE_TABLEBOOKING);
+			pstmt.setInt(1, TABLE_NO);
+			updateCount_Tables = pstmt.executeUpdate();
+			// 再刪除桌子
+			pstmt = con.prepareStatement(DELETE_GAMETABLE);
+			pstmt.setInt(1, TABLE_NO);
 			pstmt.executeUpdate();
 
-			// Handle any driver errors
+			// 2●設定於 pstm.executeUpdate()之後
+			con.commit();
+			con.setAutoCommit(true);
+			System.out.println("刪除桌子" + TABLE_NO + "時,共有桌子設定" + updateCount_Tables
+					+ "格式同時被刪除");
+			
+			// Handle any SQL errors
 		} catch (SQLException se) {
+			if (con != null) {
+				try {
+					// 3●設定於當有exception發生時之catch區塊內
+					con.rollback();
+				} catch (SQLException excep) {
+					throw new RuntimeException("rollback error occured. "
+							+ excep.getMessage());
+				}
+			}
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
-			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -147,12 +173,13 @@ public class BookinglistDAO implements Bookinglist_interface {
 				}
 			}
 		}
+
 	}
-	
+
 	@Override
-	public BookinglistVO findByPrimaryKey(Integer BOOKING_NO) {
-		
-		BookinglistVO bookinglistVO = null;
+	public GametableVO findByPrimaryKey(Integer TABLE_NO) {
+
+		GametableVO gametableVO = null;
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -162,24 +189,19 @@ public class BookinglistDAO implements Bookinglist_interface {
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ONE_STMT);
 
-			pstmt.setInt(1, BOOKING_NO);
+			pstmt.setInt(1, TABLE_NO);
 
 			rs = pstmt.executeQuery();
-			 
+
 			while (rs.next()) {
-				// empVo 也稱為 Domain objects
-				bookinglistVO = new BookinglistVO();
-				bookinglistVO.setBOOKING_NO(rs.getInt("BOOKING_NO"));
-				bookinglistVO.setTABLE_NO(rs.getInt("TABLE_NO"));
-				bookinglistVO.setTABLE_DATE(rs.getDate("TABLE_DATE"));
-				bookinglistVO.setBOOKING_CHECK_STATE(rs.getInt("BOOKING_CHECK_STATE"));
-				bookinglistVO.setPERIOD_TIME(rs.getInt("PERIOD_TIME"));
-				
-			
-				
+				// deptVO 也稱為 Domain objects
+				gametableVO = new GametableVO();
+				gametableVO.setTABLE_NO(rs.getInt("TABLE_NO"));
+				gametableVO.setTABLE_TYPE(rs.getInt("TABLE_TYPE"));
+				gametableVO.setTABLE_MANE(rs.getString("TABLE_MANE"));
 			}
 
-			// Handle any driver errors
+			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
@@ -207,14 +229,13 @@ public class BookinglistDAO implements Bookinglist_interface {
 				}
 			}
 		}
-		return bookinglistVO;
+		return gametableVO;
 	}
 	
 	@Override
-	public List<BookinglistVO> getAll() {
-		List<BookinglistVO> list = new ArrayList<BookinglistVO>();
-		
-		BookinglistVO bookinglistVO = null;
+	public List<GametableVO> getAll() {
+		List<GametableVO> list = new ArrayList<GametableVO>();
+		GametableVO gametableVO = null;
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -227,21 +248,17 @@ public class BookinglistDAO implements Bookinglist_interface {
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				// empVO 也稱為 Domain objects
-				bookinglistVO = new BookinglistVO();
-				bookinglistVO.setBOOKING_NO(rs.getInt("BOOKING_NO"));
-				bookinglistVO.setTABLE_NO(rs.getInt("TABLE_NO"));
-				bookinglistVO.setTABLE_DATE(rs.getDate("TABLE_DATE"));
-				bookinglistVO.setBOOKING_CHECK_STATE(rs.getInt("BOOKING_CHECK_STATE"));
-				bookinglistVO.setPERIOD_TIME(rs.getInt("PERIOD_TIME"));
-				list.add(bookinglistVO); // Store the row in the list
+				gametableVO = new GametableVO();
+				gametableVO.setTABLE_NO(rs.getInt("TABLE_NO"));
+				gametableVO.setTABLE_TYPE(rs.getInt("TABLE_TYPE"));
+				gametableVO.setTABLE_MANE(rs.getString("TABLE_MANE"));
+				list.add(gametableVO); // Store the row in the list將行存儲在列表中
 			}
 
-			// Handle any driver errors
+			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
-			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
 				try {
@@ -268,5 +285,5 @@ public class BookinglistDAO implements Bookinglist_interface {
 		return list;
 	}
 	
-	
 }
+

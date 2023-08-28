@@ -46,7 +46,7 @@ public class GametableDAO implements Gametable_interface{
 			pstmt = con.prepareStatement(INSERT_STMT);
 
 			pstmt.setInt(1, gametableVO.getTABLE_NO());
-			pstmt.setBytes(2, gametableVO.getTABLE_TYPE());
+			pstmt.setInt(2, gametableVO.getTABLE_TYPE());
 			pstmt.setString(3, gametableVO.getTABLE_MANE());
 
 			pstmt.executeUpdate();
@@ -87,7 +87,7 @@ public class GametableDAO implements Gametable_interface{
 			pstmt = con.prepareStatement(UPDATE);
 
 			pstmt.setInt(1, gametableVO.getTABLE_NO());
-			pstmt.setBytes(2, gametableVO.getTABLE_TYPE());
+			pstmt.setInt(2, gametableVO.getTABLE_TYPE());
 			pstmt.setString(3, gametableVO.getTABLE_MANE());
 			pstmt.executeUpdate();
 
@@ -197,7 +197,7 @@ public class GametableDAO implements Gametable_interface{
 				// deptVO 也稱為 Domain objects
 				gametableVO = new GametableVO();
 				gametableVO.setTABLE_NO(rs.getInt("TABLE_NO"));
-				gametableVO.setTABLE_TYPE(rs.getBytes("TABLE_TYPE"));
+				gametableVO.setTABLE_TYPE(rs.getInt("TABLE_TYPE"));
 				gametableVO.setTABLE_MANE(rs.getString("TABLE_MANE"));
 			}
 
@@ -250,7 +250,7 @@ public class GametableDAO implements Gametable_interface{
 			while (rs.next()) {
 				gametableVO = new GametableVO();
 				gametableVO.setTABLE_NO(rs.getInt("TABLE_NO"));
-				gametableVO.setTABLE_TYPE(rs.getBytes("TABLE_TYPE"));
+				gametableVO.setTABLE_TYPE(rs.getInt("TABLE_TYPE"));
 				gametableVO.setTABLE_MANE(rs.getString("TABLE_MANE"));
 				list.add(gametableVO); // Store the row in the list將行存儲在列表中
 			}

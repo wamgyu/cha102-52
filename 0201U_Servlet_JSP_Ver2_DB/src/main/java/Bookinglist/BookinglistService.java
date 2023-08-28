@@ -17,13 +17,13 @@ public class BookinglistService {
 		dao = new BookinglistDAO();
 	}
 	
-	public BookinglistVO addBookinglist(Integer TABLE_NO, java.sql.Date TABLE_DATE) {
+	public BookinglistVO addBookinglist(Integer TABLE_NO, java.sql.Date TABLE_DATE, Integer PERIOD_TIME) {
 
 		BookinglistVO bookinglistVO = new BookinglistVO();
-		
+	
 		bookinglistVO.setTABLE_NO(TABLE_NO);
 		bookinglistVO.setTABLE_DATE(TABLE_DATE);
-
+		bookinglistVO.setPERIOD_TIME(PERIOD_TIME);
 		
 		dao.insert(bookinglistVO);
 
@@ -35,7 +35,7 @@ public class BookinglistService {
 			dao.insert(bookinglistVO);
 		}
 		
-		public BookinglistVO updatebookinglist(Integer BOOKING_NO,Integer TABLE_NO, java.sql.Date TABLE_DATE, byte[] PERIOD_TIME) {
+		public BookinglistVO updatebookinglist(Integer BOOKING_NO,Integer TABLE_NO, java.sql.Date TABLE_DATE, Integer PERIOD_TIME) {
 			
 			BookinglistVO bookinglistVO = new BookinglistVO();
 			bookinglistVO.setBOOKING_NO(BOOKING_NO);

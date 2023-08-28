@@ -1,6 +1,10 @@
 package Testtablebooking;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
@@ -16,8 +20,8 @@ public class TablebookingService {
 		dao = new TablebookingDAO();
 	}
 
-	public TablebookingVO addtablebooking(java.sql.Date TABLE_DATE, Integer TABLE_NO, byte [] TABLE_MOR,
-			byte [] TABLE_EVE, byte [] TABLE_NIGHT) {
+	public TablebookingVO addtablebooking(java.sql.Date TABLE_DATE, Integer TABLE_NO, Integer TABLE_MOR,
+			Integer TABLE_EVE, Integer TABLE_NIGHT) {
 
 		TablebookingVO tablebookingVO = new TablebookingVO();
 
@@ -37,21 +41,25 @@ public class TablebookingService {
 		dao.insert(tablebookingVO);
 	}
 	
-	public TablebookingVO tablebookingVO(Integer TABLE_BOOK_NO, byte [] TABLE_MOR,
-			byte [] TABLE_EVE, byte [] TABLE_NIGHT) {
+	public TablebookingVO tablebookingVO(Integer TABLE_NO, Integer TABLE_MOR,
+			Integer TABLE_EVE, Integer TABLE_NIGHT) {
 		
 		TablebookingVO tablebookingVO = new TablebookingVO();
-		tablebookingVO.setTABLE_BOOK_NO(TABLE_BOOK_NO);
+		tablebookingVO.setTABLE_BOOK_NO(TABLE_NO);
 		tablebookingVO.setTABLE_MOR(TABLE_MOR);
 		tablebookingVO.setTABLE_EVE(TABLE_EVE);
 		tablebookingVO.setTABLE_NIGHT(TABLE_NIGHT);
 		dao.update(tablebookingVO);
 
-		return dao.findByPrimaryKey(TABLE_BOOK_NO);
+		return dao.findByPrimaryKey(TABLE_NO);
 	}
 	
 	public List<TablebookingVO> getAll() {
 		return dao.getAll();
+	}
+	
+	public List<TablebookingVO> getten() {
+		return dao.getten();
 	}
 
 	public TablebookingVO getOneTablebooking(Integer TABLE_DATE) {
@@ -65,4 +73,9 @@ public class TablebookingService {
 	public void deleteblebooking(Integer TABLE_BOOK_NO) {
 		dao.delete(TABLE_BOOK_NO);
 	}
+	
+	public TablebookingVO getdayandtime(Integer TABLE_DATE) {
+		return dao.findByPrimaryKey(TABLE_DATE);
+	}
+	
 }

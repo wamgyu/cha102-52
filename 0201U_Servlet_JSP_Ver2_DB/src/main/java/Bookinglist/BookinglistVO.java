@@ -8,8 +8,17 @@ public class BookinglistVO implements java.io.Serializable {
 	private Integer BOOKING_NO;
 	private Integer TABLE_NO;
 	private Date TABLE_DATE;
-	private byte[] BOOKING_CHECK_STATE;
-	private byte[] PERIOD_TIME;
+	private Integer BOOKING_CHECK_STATE;
+	private Integer BOOKING_STATE;
+	private Integer PERIOD_TIME;
+
+	public Integer getBOOKING_STATE() {
+		return BOOKING_STATE;
+	}
+
+	public void setBOOKING_STATE(Integer bOOKING_STATE) {
+		BOOKING_STATE = bOOKING_STATE;
+	}
 
 	public Integer getBOOKING_NO() {
 		return BOOKING_NO;
@@ -35,19 +44,19 @@ public class BookinglistVO implements java.io.Serializable {
 		TABLE_DATE = tABLE_DATE;
 	}
 
-	public byte[] getBOOKING_CHECK_STATE() {
+	public Integer getBOOKING_CHECK_STATE() {
 		return BOOKING_CHECK_STATE;
 	}
 
-	public void setBOOKING_CHECK_STATE(byte[] bOOKING_CHECK_STATE) {
+	public void setBOOKING_CHECK_STATE(Integer bOOKING_CHECK_STATE) {
 		BOOKING_CHECK_STATE = bOOKING_CHECK_STATE;
 	}
 
-	public byte[] getPERIOD_TIME() {
+	public Integer getPERIOD_TIME() {
 		return PERIOD_TIME;
 	}
 
-	public void setPERIOD_TIME(byte[] pERIOD_TIME) {
+	public void setPERIOD_TIME(Integer pERIOD_TIME) {
 		PERIOD_TIME = pERIOD_TIME;
 	}
 
