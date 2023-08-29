@@ -1,0 +1,1 @@
+package web.booking.vo;

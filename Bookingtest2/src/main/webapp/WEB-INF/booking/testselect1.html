@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>網頁標題</title>
+    <style>
+        h1  {
+            color: black;
+            text-decoration: underline;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+
+        /* 设置表头行的背景颜色和文字颜色 */
+        thead th {
+            background-color: #f2f2f2;
+            color: #333;
+            padding: 8px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        /* 设置数据行的背景颜色交替显示 */
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* 设置数据行的背景颜色交替显示 */
+        tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+        /* 设置单元格的内边距和文字对齐 */
+        td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        /* 设置单元格的边框 */
+        td, th {
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>預約查詢</h1>
+<button id="here">查詢全部</button>
+<div id="bookingInfo"></div>
+<!-- 省略部分 -->
+
+<script src="jquery-3.7.0.min.js"></script>
+<script>
+    let a = document.querySelector("#here");
+        a.addEventListener('click', function () {
+            $(document).ready(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:8080/PolyBrain/booking/test',
+                    data: null,
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response); // 檢查響應是否有成功
+                        finish(response);
+                    },
+                error: function (error) {
+                    alert(error.status);
+                    }
+                });
+                function finish(response){
+                    if(response.bookingstate == 0){
+
+                        let bookingInfo = document.querySelector("#bookingInfo");
+                        let row = bookingInfo.insertRow(); // 创建表格行
+                        bookingInfo.textContent = 'Booking State is 0: ' + response.someData; // 使用實際的屬性名稱
+                        let bookingnoCell = row.insertCell();
+                        let memnoCell = row.insertCell();
+                        let bookingstateCell = row.insertCell();
+                        let bookingdateCell = row.insertCell();
+
+                        // 將資料庫的data田到每一格
+                        bookingnoCell.innerText = response[i].bookingno;
+                        memnoCell.innerText = response[i].memno;
+                        bookingstateCell.innerText = response[i].bookingstate;
+                        bookingdateCell.innerText = bookingdate;
+                    }
+                }
+    });
+  });
+</script>
+</body>
+
+</html>

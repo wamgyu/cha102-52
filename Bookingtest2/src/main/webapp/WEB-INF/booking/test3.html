@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Tables - SB Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link href="css/style3.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.23/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+            crossorigin="anonymous"></script>
+    <!--BootStrap-->
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">-->
+    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>-->
+    <!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
+    <style>
+        tr.row-hover:hover {
+            background-color: #f5f5f5;
+            /* 鼠标悬停时的背景颜色 */
+            cursor: pointer;
+            /* 鼠标指针样式 */
+        }
+    </style>
+</head>
+
+<body class="sb-nav-fixed">
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <!-- Navbar Brand-->
+    <a class="navbar-brand ps-3" href="index.html">Start Bootstrap</a>
+    <!-- Sidebar Toggle-->
+    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
+            class="fas fa-bars"></i></button>
+    <!-- Navbar Search-->
+    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+        <div class="input-group">
+            <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..."
+                   aria-describedby="btnNavbarSearch" />
+            <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i
+                    class="fas fa-search"></i></button>
+        </div>
+    </form>
+    <!-- Navbar-->
+    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+
+    </ul>
+</nav>
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Core</div>
+                    <a class="nav-link" href="index.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+                    <div class="sb-sidenav-menu-heading">Interface</div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                       data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                        Layouts
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
+                         data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="layout-static.html">Static Navigation</a>
+                            <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
+                        </nav>
+                    </div>
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
+                       aria-expanded="false" aria-controls="collapsePages">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        Pages
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
+                         data-bs-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                               data-bs-target="#pagesCollapseAuth" aria-expanded="false"
+                               aria-controls="pagesCollapseAuth">
+                                Authentication
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne"
+                                 data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="login.html">Login</a>
+                                    <a class="nav-link" href="register.html">Register</a>
+                                    <a class="nav-link" href="password.html">Forgot Password</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                               data-bs-target="#pagesCollapseError" aria-expanded="false"
+                               aria-controls="pagesCollapseError">
+                                Error
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne"
+                                 data-bs-parent="#sidenavAccordionPages">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="401.html">401 Page</a>
+                                    <a class="nav-link" href="404.html">404 Page</a>
+                                    <a class="nav-link" href="500.html">500 Page</a>
+                                </nav>
+                            </div>
+                        </nav>
+                    </div>
+                    <div class="sb-sidenav-menu-heading">Addons</div>
+                    <a class="nav-link" href="charts.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                        Charts
+                    </a>
+                    <a class="nav-link" href="tables.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Tables
+                    </a>
+                </div>
+            </div>
+            <div class="sb-sidenav-footer">
+                <div class="small">Logged in as:</div>
+                Start Bootstrap
+            </div>
+        </nav>
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Tables</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Tables</li>
+                </ol>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        DataTables is a third party plugin that is used to generate the demo table below. For more
+                        information about DataTables, please visit the
+                        <a target="_blank" href="https://datatables.net/">official DataTables documentation</a>
+                        .
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        DataTable Example
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                            <th data-sortable="true">Name</th>
+                            <th data-sortable="true">MemberNo</th>
+                            <th data-sortable="true">BookingState</th>
+                            <th data-sortable="true">BookingSDate</th>
+                            <th>NewColumn</th>
+
+                            </thead>
+
+
+                            <div
+                                    class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
+                                <div class="datatable-container">
+                                    <!--                                        <table id="datatables" class="datatable-table">-->
+                                    <tbody>
+                                    </tbody>
+                                    <!--                                        </table>-->
+                                </div>
+                            </div>
+                    </div>
+
+
+                </div>
+                </table>
+            </div>
+    </div>
+
+
+</div>
+</main>
+<footer class="py-4 bg-light mt-auto">
+    <div class="container-fluid px-4">
+        <div class="d-flex align-items-center justify-content-between small">
+            <div class="text-muted">Copyright &copy; Your Website 2023</div>
+            <div>
+                <a href="#">Privacy Policy</a>
+                &middot;
+                <a href="#">Terms &amp; Conditions</a>
+            </div>
+        </div>
+    </div>
+</footer>
+</div>
+</div>
+<script>
+    //使用datatable套件
+    $(document).ready(function () {
+        let dataTable; // 宣告 DataTables 變數
+
+        // 初始化 DataTable
+        function initializeDataTable(data) {
+            if (dataTable) {
+                dataTable.destroy(); // 銷毀當前的DataTables實例
+            }
+
+            dataTable = $('#datatablesSimple').DataTable({
+                "lengthMenu": [[5, 10, 15, 20, -1], [5, 10, 15, 20, "全部"]],
+                "style": "bootstrap",
+
+                ajax: {
+                    url: "http://localhost:8080/PolyBrain/booking/test",
+                    method: "GET",
+                    dataSrc: "" // 数据源为空，因为数据是直接数组
+                },
+                columns: [
+                    { data: 'bookingno', title: "預約單號" },
+                    { data: 'memno', title: "會員編號" },
+                    { data: 'bookingstate', title: "預約狀態", render: data => categoryMap[data] },
+                    {
+                        data: 'bookingdate',
+                        title: "預約日期",
+                        render: function (data, type, row) {
+                            // 将日期字符串转换为JavaScript日期对象
+                            var date = data.replace(/月/g, "");
+                            var date1 = new Date(date);
+
+                            // 获取年、月、日
+                            var year = date1.getFullYear();
+                            var month = date1.getMonth() + 1; // 月份从0开始，所以要加1
+                            var day = date1.getDate();
+
+                            // 格式化为"YYYY/M/D"的字符串
+                            var formattedDate = year + '/' + month + '/' + day;
+
+                            return formattedDate;
+                        }
+                    },
+                    {
+                        data: null, title: "操作功能",  // 這邊是欄位
+                        render: function (data, type, row) {
+                            return '<button type="button" class="btn btn-sm" style="background-color: #DCDDDF;">編輯</button> ' +
+                                '<button type="button" class="btn btn-sm" style="background-color: #B87F78;">刪除</button>'
+                        }
+                    },
+                ],
+
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.10.25/i18n/English.json',
+                },
+                columnDefs: [
+                    {
+                        targets: [0], // 第一欄
+                        createdCell: function (cell, cellData, rowData, rowIndex, colIndex) {
+                        },
+                    },
+                    {
+                        targets: "_All",//全部欄
+                        className: 'text-center'
+                    }
+
+                ],
+                rowCallback: function (row, data, index) {
+                    $(row).addClass('row-hover'); // 添加CSS类
+                }
+                // 其他设置...
+            });
+        }
+        const categoryMap = {
+            0: '已預約',
+            1: '未預約',
+
+        };
+
+
+
+
+        // 初始化 DataTable，首次加载
+        initializeDataTable([]);
+    });
+</script>
+<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+        crossorigin="anonymous"></script>
+<!--<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>-->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+
+<!--<script src="js/test3.js"></script>-->
+<!--<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>-->
+
+</body>
+
+</html>
